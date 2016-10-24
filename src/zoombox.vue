@@ -7,13 +7,13 @@ div.zoombox(
   img(
     v-bind:src="cSrc"
     v-if="cSrc && !loaded"
-    v-el:imgsrc
+    ref="imgsrc"
     @load="processSrc"
     style="position:absolute;visibility:hidden"
     )
   img.zoombox-image(
     :style="thumbStyle",
-    v-el:thumb,
+    ref="thumb",
     v-if="!thumbLoaded || (!opened && !opening && !closing)",
     style="transform-origin: top left; max-width: 100%; height: auto",
     @load="processThumb",
@@ -28,7 +28,7 @@ div.zoombox(
     :transition="cTransition"
     )
   div.zoombox-caption(
-    v-el:caption,
+    ref="caption",
     :style="captionStyle",
     style="position: fixed",
     v-if="opened || !loaded",
@@ -66,7 +66,7 @@ module.exports =
     delay:
       type: Number
       default: 3000
-      coerce: Number
+      # coerce: Number
     transition:
       type: String
       default: "zoombox"
@@ -76,7 +76,7 @@ module.exports =
     maxScale:
       type: Number
       default: Number.MAX_VALUE
-      coerce: Number
+      # coerce: Number
     allowScroll:
       type: Boolean
       default: false
@@ -86,7 +86,7 @@ module.exports =
     opacity:
       type: Number
       default: 0.5
-      coerce: Number
+      # coerce: Number
 
   computed:
     ccTransition: ->
@@ -286,10 +286,10 @@ module.exports =
         @close()
       else
         @open()
-  beforeCompile: ->
+  created: ->
     @available = false
 
-  ready: ->
+  mounted: ->
     @overlay = require("vue-overlay")(@Vue)
     @available = true if @opened
     @onWindowResize =>
